@@ -1,1 +1,1 @@
-# Assignments submitted for Winter 2026 COMP445: Computational Linguistics from McGill University
+# Winter 2026 COMP445: Computational Linguistics @ McGill University
