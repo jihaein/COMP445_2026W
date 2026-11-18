@@ -1,0 +1,730 @@
+\documentclass[10pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb, graphicx, multicol, array, parskip}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{url}
+% use straight quotes in texttt environment, make 0 different from O
+\usepackage[zerostyle=b,straightquotes,scaled=.93]{newtxtt}
+
+\usepackage{listings}
+\lstset{
+ basicstyle=\ttfamily,
+ columns=fullflexible,
+ upquote,
+ keepspaces,
+ literate={*}{{\char42}}1
+ {-}{{\char45}}1
+}
+\usepackage[short labels]{enumitem}
+
+\usepackage{soul}  % for strike through (\st{})
+\usepackage[dvipsnames,usenames,table]{xcolor} % for colors
+% \usepackage[htt]{hyphenat} % to break lines in texttt
+
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{mdframed}
+\global\mdfdefinestyle{simple}{linewidth=1pt,skipabove=.5em}
+\newenvironment{AnswerBox}{\begin{mdframed}[style=simple]}{\end{mdframed}}
+\newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily def}}}{=}}}
+\usepackage[colorlinks]{hyperref} % \href{http://link.com}{link text}
+\hypersetup{linkcolor=NavyBlue,citecolor=NavyBlue,filecolor=NavyBlue,urlcolor=NavyBlue}
+\usepackage{dsfont}
+\newcommand{\required}[1]{{\color{blue}{#1}}}
+\newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
+\newcommand{\PSnum}{5}
+
+\author{ 
+  \textbf{Name}:       %Put your name here.
+, \textbf{McGill ID}:  %Put your McGill ID here.
+}
+
+\begin{document}
+
+\title{LING/COMP 445, LING 645\\Problem Set \PSnum}
+\date{Due before 8:35 AM on Thursday, November 20, 2025}
+\maketitle
+Please enter your name and McGill ID above.
+
+This problem set consists only of questions involving mathematics or
+English or or a combination of the two (no coding questions this time).
+Please put your answers in an answer box like in the example below.
+
+Once you have entered your answers, please compile your copy of this
+\LaTeX{} into a PDF and submit 
+\begin{enumerate}[(i),noitemsep]
+\item
+the compiled PDF renamed to
+\texttt{ps\PSnum-lastname-firstname.pdf} and
+\item
+the raw \LaTeX{} file renamed to
+\texttt{ps\PSnum-lastname-firstname.tex}
+\end{enumerate}
+to the Problem Set \PSnum{} folder under `Assignments' on MyCourses.
+
+
+\hrulefill %--------------------------------
+
+\paragraph{Example Problem:}
+This is an example question using some fake math like this
+$L=\sum_0^{\infty} \mathcal{G} \delta_x$.
+
+\paragraph{Example Answer:} Put your answer in the box provided, like this:
+\begin{AnswerBox}
+Example answer is $L=\sum_0^{\infty} \mathcal{G} \delta_x$.
+\end{AnswerBox}
+
+
+\hrulefill%--------------------------------
+
+\pagebreak%
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 1:}
+ 
+In class we gave the following equation for the bigram probability of
+a sequence of words $W^{(1)},\dots,W^{(k)}$:
+
+\begin{equation}\label{eq:bigram}
+\Pr(W^{(1)},\dots,W^{(k)})
+\defeq\prod_{i=1}^k \Pr(W^{(i)} | W^{(i-1)}=w^{(i-1)})
+\end{equation}
+
+ Using this formula, give an expression for the bigram
+probability of the sentence $abab$, where each character is treated as
+a word. Try to simplify the formula as much as possible.
+
+\paragraph{Important note:} Throughout this problem set, the vocabulary will be
+$V\defeq\{a,b\}$. We will assume the length of the sentence is fixed at some $k$,
+and \emph{we will not use the stop symbol}.  
+That is, in a sentence of length $k$, for $1 \le i \le k$, the possible
+values for the random variable $W^{(i)}$ are just $a$ and $b$, and we 
+will refer to the beginning of the string as  $W^{(0)} = \rtimes$ always.
+So, $\Pr(W^{(1)}=a \mid W^{(0)}=\rtimes)$ is
+the probability that the string starts with $a$.
+
+\paragraph{Answer 1:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    Using the given bigram formula,
+    \[
+    \Pr(W^{(1)}, \dots ,W^{(k)})
+    \defeq \prod_{i=1}^k \Pr(W^{(i)} | W^{(i-1)}=w^{(i-1)})
+    \]
+
+    sentence abab has length k = 4, so
+    \[
+    W^{(0)} = \rtimes,\quad 
+    W^{(1)} = a,\quad 
+    W^{(2)} = b,\quad 
+    W^{(3)} = a,\quad 
+    W^{(4)} = b.
+    \]
+    
+    Thus,
+    \[
+    \Pr(abab)
+    = \Pr(a \mid \rtimes)\, \Pr(b \mid a)\, \Pr(a \mid b)\, \Pr(b \mid a).
+    \]
+    
+    Which can be further simplified to:
+    \[ \Pr(abab) = \Pr(a \mid \rtimes)\,[\Pr(b \mid a)]^{2}\,\Pr(a \mid b). \]
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 2:}
+
+There are two possible symbols/words in our language, $a$ and $b$. There are
+three conditional distributions in the bigram model for this language, 
+$\Pr(W^{(i)} | W^{(i-1)}=a)$, $\Pr(W^{(i)} | W^{(i-1)}=b)$, and
+$\Pr(W^{(i)} | W^{(i-1)}=\rtimes)$. 
+These conditional distributions are associated with the
+parameter vectors $\vec{\theta}_{a}$, $\vec{\theta}_{b}$, and
+$\vec{\theta}_{\rtimes}$, respectively (these parameter vectors were implicit in the
+previous problem). For the current problem, we will assume that these
+parameters are fixed. Use a second subscript notation to denote components of
+these vectors, so $\theta_{ab}= \Pr(W^{(i)}=b\mid W^{(i-1)}=a)$.
+
+ Suppose that we are given a sentence $W^{(1)},\dots,W^{(k)}$. We will
+use the notation $n_{x \rightarrow y}$ to denote the number of times
+that the symbol $y$ occurs immediately following the symbol $x$ in the
+sentence. For example, $n_{a \rightarrow a}$ counts the number of
+times that symbol $a$ occurs immediately following the symbol $a$.
+Using Equation \ref{eq:bigram}, give an expression for the probability
+of a length $k$ sentence in our language:
+\begin{equation*}
+\Pr(W^{(1)},\dots,W^{(k)} | \vec{\theta}_{a}, \vec{\theta}_{b}, \vec{\theta}_{\rtimes})
+\end{equation*}
+
+ The expression should make use of the $n_{x \rightarrow y}$ notation
+defined above.
+
+ Hint: the expression should be analogous to the formula that we found
+for the likelihood of a corpus under a bag of words model.
+
+\paragraph{Answer 2:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    According to the bigram model, the probability of a sentence of length $k$ is
+    \[
+    \Pr(W^{(1)},\dots,W^{(k)})
+    \defeq\prod_{i=1}^k \Pr(W^{(i)} | W^{(i-1)})
+    \]
+    
+    Let $n_{x \to y}$ be the number of times $y$ comes right after $x$.
+    Every time we do $x \to y$, $\theta_{xy}$ is multiplied, so if it occurs $n_{x \to y}$ times, we will get $\theta_{xy}^{\,n_{x \to y}}$.
+    
+    Therefore, an expression for the probability of a length k sentence in our language can be expressed as:
+    \[
+    \Pr(W^{(1)},\dots,W^{(k)} | \vec{\theta}_{a}, \vec{\theta}_{b}, \vec{\theta}_{\rtimes})
+    = \theta_{\rtimes a}^{\,n_{\rtimes \to a}}
+    \theta_{\rtimes b}^{\,n_{\rtimes \to b}}
+    \theta_{aa}^{\,n_{a \to a}}
+    \theta_{ab}^{\,n_{a \to b}}
+    \theta_{ba}^{\,n_{b \to a}}
+    \theta_{bb}^{\,n_{b \to b}}.
+    \]
+    
+    Thus, if we simplify this,
+    \[
+    \Pr(W^{(1)},\dots,W^{(k)} \mid \vec{\theta}_a, \vec{\theta}_b, \vec{\theta}_{\rtimes})
+    = \prod_{x \in \{\rtimes, a, b\}}
+    \prod_{y \in \{a, b\}}
+    \theta_{xy}^{\,n_{x \to y}}.
+    \]
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 3:}
+
+
+Assume the parameter vectors in our bigram model have the following values:
+\begin{align*}
+&\vec{\theta}_{a} = (0.7,0.3)\\
+&\vec{\theta}_{b} = (0.2,0.8)\\
+&\vec{\theta}_{\rtimes} = (0.5,0.5)
+\end{align*}
+
+ The first vector indicates that if the current symbol is $a$,
+there is probability $0.7$ of transitioning to the symbol $a$, and
+probability $0.3$ of transitioning to the symbol $b$. Using your
+answer to the previous problem and these parameter values, calculate
+the probability of the string $aabab$.
+
+\paragraph{Answer 3:} Please put your answer in the box below.
+
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    \[
+    \Pr(aabab)
+    = \theta_{\rtimes a}\theta_{aa}\theta_{ab}\theta_{ba}\theta_{ab}
+    = \theta_{\rtimes a}\theta_{aa}\theta_{ab}^2\theta_{ba}
+    = 0.5 \cdot 0.7 \cdot 0.3^2 \cdot 0.2
+    = 0.0063.
+    \]
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 4:}
+
+In Problem 2, you found an expression for the bigram probability of a
+sentence in our language, which contains the symbols $a$ and $b$. In
+that problem, we assumed that there were fixed parameter vectors
+$\vec{\theta}$ associated with each conditional distribution. In this
+problem, we will consider the setting in which we have uncertainty
+about the value of these parameters.
+
+ As we did in class, we will use the Dirichlet distribution to 
+define a prior over parameters.  Assume each parameter vector is drawn
+independently given $\vec{\alpha}$:
+\begin{align}
+\vec{\theta}_{\mathbf{c}} \mid \vec{\alpha} 
+    &\sim\mathrm{Dirichlet}(\vec{\alpha}) \\
+w^{(i)} \mid  w^{(i-1)} 
+    &\sim\mathrm{categorical}(\vec{\theta}_{w^{(i-1)}}) \\
+w^{(1)} 
+    &\sim \mathrm{categorical}(\vec{\theta}_{\rtimes})\
+\end{align}
+
+ Suppose that we have a fixed-length sentence
+$S=W^{(1)},\dots,W^{(k)}$. Give an expression for the joint
+probability
+$\Pr(S, \vec{\theta}_{a}, \vec{\theta}_{b}, \vec{\theta}_{\rtimes} |
+\vec{\alpha})$
+using the definitions of Dirichlet distributions and likelihoods we
+defined in class.
+
+\paragraph{Answer 4:} Please put your answer in the box below.
+
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    We can use dirichlet priors for each parameter vector with the bigram likelihood, and since the $\vec\theta_c$ is independent from each other:
+    
+    \[
+    \Pr(S,\vec\theta_a,\vec\theta_b,\vec\theta_{\rtimes}\mid\vec\alpha)
+    = \Pr(\vec\theta_a\mid\vec\alpha)\,
+    \Pr(\vec\theta_b\mid\vec\alpha)\,
+    \Pr(\vec\theta_{\rtimes}\mid\vec\alpha)\,
+    \Pr(S\mid\vec\theta_a,\vec\theta_b,\vec\theta_{\rtimes}).
+    \]
+
+    Each Dirichlet prior would looke like:
+        \[
+    \Pr(\vec\theta_c\mid\vec\alpha)
+    = \frac{\Gamma(\alpha_a+\alpha_b)} {\Gamma(\alpha_a)\Gamma(\alpha_b)}
+    \theta_{ca}^{\alpha_a-1}\, \theta_{cb}^{\alpha_b-1}.
+    \]
+    
+    From the previous question, the bigram model is,
+    \[
+    \Pr(S\mid\theta)
+    = \prod_{x\in\{\rtimes,a,b\}}
+    \prod_{y\in\{a,b\}}
+    \theta_{xy}^{\,n_{x\to y}}.
+    \]
+    
+    If we put these together, we get:
+    
+    \[
+    \Pr(S,\vec\theta_a,\vec\theta_b,\vec\theta_{\rtimes}\mid\vec\alpha)
+    = \left[ \prod_{c\in\{\rtimes,a,b\}}
+    \frac{\Gamma(\alpha_a+\alpha_b)} {\Gamma(\alpha_a)\Gamma(\alpha_b)}
+    \theta_{ca}^{\alpha_a-1}\, \theta_{cb}^{\alpha_b-1} \right]
+    \left[ \prod_{x\in\{\rtimes,a,b\}}
+    \prod_{y\in\{a,b\}}
+    \theta_{xy}^{\,n_{x\to y}} \right].
+    \]
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 5:}
+
+In the previous problem, you found a formula for the joint probability
+of a sentence and a set of bigram model parameters. Using this, give a
+formula for the marginal probability of the sentence
+$\Pr(S|\vec{\alpha})$.
+
+ Hint: The formula should be analogous to the formula derived
+in class for marginal probability of a corpus under a bag of words
+model. Whereas before there was only a single parameter vector
+$\vec{\theta}$, now there are three parameter vectors that need to be
+marginalized away. Otherwise the calculation will be similar.
+
+\paragraph{Answer 5:} Please put your answer in the box below.
+
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    To get $\Pr(S \mid \vec\alpha)$, we can integrate out the three parameter vectors from the problem 4 solution:
+    
+    \[
+    \Pr(S \mid \vec\alpha)
+    = \int \Pr (S,\vec\theta_a,\vec\theta_b,\vec\theta_{\rtimes}\mid\vec\alpha) \,
+       d\vec\theta_a\,d\vec\theta_b\,d\vec\theta_{\rtimes}.
+    \]
+    
+    Since the priors are independent,
+    \[ \Pr(S \mid \vec\alpha)
+    = \prod_{c\in\{\rtimes,a,b\}}
+       \int \Pr(\vec\theta_c \mid \vec\alpha)
+            \prod_{y\in\{a,b\}}
+            \theta_{cy}^{\,n_{c\to y}}\, d\vec\theta_c .
+    \]
+    
+    Here, the integrand can be expanded to:    
+    \[
+    \Pr(\vec\theta_c\mid\vec\alpha)
+    \prod_{y\in\{a,b\}}
+    \theta_{cy}^{\,n_{c\to y}}
+    =
+    \frac{\Gamma(\alpha_a+\alpha_b)} {\Gamma(\alpha_a)\Gamma(\alpha_b)}
+    \theta_{ca}^{\alpha_a-1+n_{c\to a}} \theta_{cb}^{\alpha_b-1+n_{c\to b}}.
+    \]
+
+    Using the bag-of-words model, 
+    \[
+    \int
+    \theta_{ca}^{\alpha_a-1+n_{c\to a}} \theta_{cb}^{\alpha_b-1+n_{c\to b}} \, d\vec\theta_c
+    =
+    \frac{\Gamma(\alpha_a+n_{c\to a}) \Gamma(\alpha_b+n_{c\to b})} {\Gamma(\alpha_a+\alpha_b+n_{c\to a}+n_{c\to b})}.
+    \]
+    
+    Thus, by putting it altogether, we get:
+    \[
+    \Pr(S\mid\vec\alpha)
+    =
+    \prod_{c\in\{\rtimes,a,b\}}
+    \frac{\Gamma(\alpha_a+\alpha_b)} {\Gamma(\alpha_a)\Gamma(\alpha_b)}
+    \frac{\Gamma(\alpha_a+n_{c\to a})\, \Gamma(\alpha_b+n_{c\to b})} {\Gamma(\alpha_a+\alpha_b+n_{c\to a}+n_{c\to b})}.
+    \]
+    
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 6:}
+
+
+Let us assume that the parameters of the Dirichlet distribution are
+$\vec{\alpha} = (1,1)$. Using your solution to the previous problem,
+write an expression for $\Pr(S=aabab\mid \vec \alpha = (1,1))$,
+the marginal probability of the string $aabab$.
+The expression should should contain the
+\href{https://en.wikipedia.org/wiki/Gamma_function}{gamma function}
+$\Gamma(\cdot)$. Using the properties of the gamma function discussed
+in class (i.e., its relationship to the factorial) or an online
+calculator, compute a numerical value for this expression.
+
+
+
+\paragraph{Answer 6:} Please put your answer in the box below.
+
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    For the string $S = aabab$, the bigram counts are:
+    \[ \begin{aligned}
+    n_{\rtimes \to a} = 1, \\
+    n_{\rtimes \to b} = 0, \\
+    n_{a \to a} = 1, \\
+    n_{a \to b} = 2, \\
+    n_{b \to a} = 1, \\
+    n_{b \to b} = 0. 
+    \end{aligned}
+    \]
+    
+    Using solution of Problem 5,
+    \[
+    \Pr(S\mid\vec\alpha)
+    =
+    \prod_{c\in\{\rtimes,a,b\}}
+    \frac{\Gamma(\alpha_a+\alpha_b)} {\Gamma(\alpha_a)\Gamma(\alpha_b)}
+    \frac{\Gamma(\alpha_a+n_{c\to a})\, \Gamma(\alpha_b+n_{c\to b})} {\Gamma(\alpha_a+\alpha_b+n_{c\to a}+n_{c\to b})}.
+    \]
+    
+    $\vec{\alpha} = (1,1)$, so $\alpha_a=\alpha_b=1$:
+    \[
+    \Pr(S \mid \vec{\alpha}=(1,1))
+    =
+    \prod_{c\in\{\rtimes,a,b\}}
+    \frac{\Gamma(2)} {\Gamma(1)\Gamma(1)}
+    \frac{\Gamma(1+n_{c\to a})\, \Gamma(1+n_{c\to b})} {\Gamma(2+n_{c\to a}+n_{c\to b})}.
+    \]
+    
+    Thus, we can plug in the values as:
+    \[
+    \Pr(S \mid \vec{\alpha}=(1,1))
+    =
+    \left[\frac{\Gamma(2)\Gamma(2)\Gamma(1)}{\Gamma(3)}\right]
+    \left[\frac{\Gamma(2)\Gamma(3)}{\Gamma(4)}\right]
+    \left[\frac{\Gamma(2)\Gamma(1)}{\Gamma(3)}\right].
+    \]
+    
+    Therefore,
+    \[
+    \Pr(S \mid \vec{\alpha}=(1,1))
+    =
+    \left[\frac{1!\,1!\,0!}{2!}\right]
+    \left[\frac{1!\,2!}{3!}\right]
+    \left[\frac{1!\,0!}{2!}\right]
+    =
+    \frac{1}{2}\cdot\frac{1}{12}\cdot\frac{1}{2}
+    =
+    \frac{1}{48} \approx 0.0208.
+    \]
+    
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 7:}
+
+Suppose that we have observed a sentence
+$S=W^{(1)},\dots,W^{(k)}$. Find an expression for the posterior
+distribution over the model parameters,
+$\Pr(\vec{\theta_a}, \vec{\theta_b}, \vec{\theta}_{\rtimes} \mid S,
+\vec{\alpha})$.
+
+ Hint: Use the joint probability that you computed in Problem
+4 and Bayes' rule. The solution should be analogous to the posterior
+probability for the bag of words model.
+
+\paragraph{Answer 7:}  Please put your answer in the box below.
+
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+    According to Bayes' rule:
+    
+    \[
+    \Pr(\vec\theta_a,\vec\theta_b,\vec\theta_{\rtimes} \mid S,\vec\alpha)
+    =
+    \frac{\Pr(S,\vec\theta_a,\vec\theta_b,\vec\theta_{\rtimes}\mid\vec\alpha)} {\Pr(S\mid\vec\alpha)}.
+    \]
+    
+    From the problem 5, we have:
+    
+    \[
+    \Pr(S,\vec\theta_a,\vec\theta_b,\vec\theta_{\rtimes}\mid\vec\alpha)
+    =
+    \Pr(\vec\theta_a\mid\vec\alpha)\,
+    \Pr(\vec\theta_b\mid\vec\alpha)\,
+    \Pr(\vec\theta_{\rtimes}\mid\vec\alpha)
+    \prod_{x\in\{\rtimes,a,b\}}
+    \prod_{y\in\{a,b\}}
+    \theta_{xy}^{\,n_{x\to y}}.
+    \]
+    
+    For each $c$, the prior is:
+    
+    \[
+    \Pr(\vec\theta_c\mid\vec\alpha)
+    \propto \theta_{ca}^{\alpha_a-1}\theta_{cb}^{\alpha_b-1}.
+    \]
+    
+    Therefore, can be simplified to:
+    
+    \[
+    \Pr(\vec\theta_c \mid S,\vec\alpha)
+    \propto \theta_{ca}^{\,(\alpha_a + n_{c\to a}) - 1}\,
+    \theta_{cb}^{\,(\alpha_b + n_{c\to b}) - 1}.
+    \]
+    
+    We can see that each parameter vector has a Dirichlet posterior:
+    
+    \[
+    \vec\theta_c \mid S,\vec\alpha
+    \sim
+    \text{Dirichlet}(\alpha_a + n_{c\to a},\; \alpha_b + n_{c\to b}\bigr),
+    \quad c\in\{\rtimes,a,b\}.
+    \]
+    
+    Thus,
+    
+    \[
+    \Pr(\vec\theta_a,\vec\theta_b,\vec\theta_{\rtimes}\mid S,\vec\alpha)
+    =
+    \prod_{c\in\{\rtimes,a,b\}}
+    \text{Dirichlet}(\alpha_a + n_{c\to a},\; \alpha_b + n_{c\to b}\bigr).
+    \]
+    
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 8:}
+
+Using your formula for the posterior distribution and setting
+$\vec{\alpha} = (1,1)$, give an expression for the posterior
+distribution over parameters given the sentence $aabab$
+(don't evaluate it at particular parameter values).
+There should be an easy way to interpret the posterior distribution, and how it was
+derived from the observed sentence. What is this interpretation?
+
+\paragraph{Answer 8:} Please put your answer in the box below.
+
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+    From problem 7, the posterior for each parameter is:
+    \[
+    \vec\theta_c \mid S,\vec\alpha
+    \sim \text{Dirichlet}(\alpha_a + n_{c\to a},\; \alpha_b + n_{c\to b}),
+    \]
+    And since $\alpha_a=\alpha_b=1$, we just add them to prior:
+    \[
+    \begin{aligned}
+    \vec\theta_{\rtimes} \mid S &\sim \text{Dirichlet}(1+1,\; 1+0)
+    = \text{Dirichlet}(2,1),\\[6pt]
+    \vec\theta_{a} \mid S &\sim \text{Dirichlet}(1+1,\; 1+2)
+    = \text{Dirichlet}(2,3),\\[6pt]
+    \vec\theta_{b} \mid S &\sim \text{Dirichlet}(1+1,\; 1+0)
+    = \text{Dirichlet}(2,1).
+    \end{aligned}
+    \]
+    
+    Therefore, an expression for the posterior distribution over parameters given the sentence aabab is:
+    \[
+    \Pr(\vec\theta_{\rtimes},\vec\theta_a,\vec\theta_b \mid S,\vec\alpha)
+    =
+    \text{Dirichlet}(2,1)\, \text{Dirichlet}(2,3)\, \text{Dirichlet}(2,1).
+    \]
+    
+        %%%%%%%%%%%%%%%%%%%%%%%
+    
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 9:}
+
+Consider the language $L=\{a^* b a^*\}$, that is, the language
+consisting of some number of a's, followed by a single b, followed by
+some number of a's. Show that this language is not strictly
+$2$-local.
+
+ Hint: use $n$-Local Suffix Substitution Closure ($n$-SSC).
+
+\paragraph{Answer 9:} Please put your answer in the box below.
+
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    $L = a^* b a^*$ since 2-SSC states that if a language is 2-local, then whenever two strings share a substring length of 1, we should be able to divide the strings around the substring and swap and still get a string in the language.
+    
+    Let $s_1$ and $s_2$ be strings in $L$:
+    
+    \[ s_1 = aaaba, \qquad s_2 = abaaa. \]
+    
+    Since both strings contain the substring $a$, I can divide the string around $a$.
+    
+    $s_1 = aaaba$ can be divided up into:
+    \[ u_1 = aa, \quad x = a, \quad v_1 = ba. \]
+    
+    And $s_2 = abaaa$ can be divided up into:
+    \[ u_2 = a, \quad x = a, \quad v_2 = baa. \]
+    
+    If $L$ were strictly 2-local, then 2-SSC says the swapped string would also be in the language. However,
+    
+    \[ u_1 x v_2 = aa \, a \, baa = aaabaa, \]
+    \[ u_2 x v_1 = a \, a \, ba = aaba. \]
+    
+    we can see that $aaabaa$ is no longer in $L$. Therefore $L$ is not strictly 2-local.
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 10:}
+
+Consider the language
+$L= \{a^n b^m c^n d^m\ | n, m \in \mathbb{N} \}$, that is, the
+language consisting of $n$ a's followed by $m$ b's followed by $n$ c's
+followed by $m$ d's where $n$ and $m$ are
+natural numbers. Show that this language is not strictly $2$-local.
+
+ Hint: use the same property as in the problem above.
+
+\paragraph{Answer 10:} Please put your answer in the box below.
+
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    According to 2-SSC, if a language is strictly 2-local, then for any two strings that share a substring of length 1, swapping their suffixes should still keep the altered strings in that language.
+    
+    Let $s_1$ and $s_2$ in $L$:
+    \[ s_1 = a^2 b^2 c^2 d^2 = aabbccdd \]
+    \[ s_2 = a^3 b^1 c^3 d^1 = aaabcd \]
+    
+    Both strings contains substring \(b\), so I can divide up the strings at a point of \(b\) and swap what comes after.
+    
+    Therefore, dividing would result in:
+    \[ s_1 = aa \; b \; bccdd \]
+    \[ s_2 = aaa \; b \; ccd \]
+    
+    And swapping the suffixes would result in:
+    \[ t_1 = aa\;b\;ccd \]
+    \[ t_2 = aaa\;b\;bccdd \]
+    
+    The $t_1$ string, $aabccd$ is in the language.
+    
+    However, $t_2$ string, $aabbccdd$ has: 3 a's, 2 b's, 2 c's, 2 d's,
+    
+    so it's no longer in $L$.
+    
+    Since this violates the 2-SSC property, the language \(L\) is not strictly 2-local.
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 11:}
+
+Show that the language $L= \{a^n b^m c^n d^m\ | n, m \in \mathbb{N} \}$ is not
+strictly $k$-local, for any value of $k$.
+
+\paragraph{Answer 11:} Please put your answer in the box below.
+
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    %% YOUR ANSWER HERE. %%
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 12:}
+
+In class we proved that
+$L \in \mathrm{SL}_k \implies k\mathrm{-SSC}(L)$. In other words, if a
+language is $k$-strictly local, then it satisfies $k$-Local Suffix Substitution
+Closure.
+
+Use this theorem to prove that $k$-strictly local languages
+are closed under intersection. More precisely, prove that if
+$L_1 \in \mathrm{SL}_k$ and $L_2 \in \mathrm{SL}_k$, then
+$L_1 \cap L_2 \in \mathrm{SL}_k$.
+
+\paragraph{Answer 12:}  Please put your answer in the box below.
+
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    %% YOUR ANSWER HERE. %%
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\end{document}
